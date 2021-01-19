@@ -342,7 +342,7 @@ BOOL SettingsPage::OnInitDialog() {
       AddComboString(IDC_COMBO_TORRENT_SEARCH, L"https://nyaa.si/?page=rss&c=1_2&f=0&q=%title%");
       SetDlgItemText(IDC_COMBO_TORRENT_SEARCH, taiga::settings.GetTorrentDiscoverySearchUrl().c_str());
       CheckDlgButton(IDC_CHECK_TORRENT_AUTOCHECK, taiga::settings.GetTorrentDiscoveryAutoCheckEnabled());
-      SendDlgItemMessage(IDC_SPIN_TORRENT_INTERVAL, UDM_SETRANGE32, 10, 3600);
+      SendDlgItemMessage(IDC_SPIN_TORRENT_INTERVAL, UDM_SETRANGE32, 1, 3600);
       SendDlgItemMessage(IDC_SPIN_TORRENT_INTERVAL, UDM_SETPOS32, 0, taiga::settings.GetTorrentDiscoveryAutoCheckInterval());
       EnableDlgItem(IDC_EDIT_TORRENT_INTERVAL, taiga::settings.GetTorrentDiscoveryAutoCheckEnabled());
       EnableDlgItem(IDC_SPIN_TORRENT_INTERVAL, taiga::settings.GetTorrentDiscoveryAutoCheckEnabled());
