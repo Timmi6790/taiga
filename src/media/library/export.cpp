@@ -1,6 +1,6 @@
 /*
 ** Taiga
-** Copyright (C) 2010-2020, Eren Okka
+** Copyright (C) 2010-2021, Eren Okka
 **
 ** This program is free software: you can redistribute it and/or modify
 ** it under the terms of the GNU General Public License as published by
@@ -23,6 +23,7 @@
 
 #include "base/file.h"
 #include "base/format.h"
+#include "base/log.h"
 #include "base/string.h"
 #include "base/time.h"
 #include "base/xml.h"
@@ -99,8 +100,14 @@ bool ExportAsMalXml(const std::wstring& path) {
 
   for (const auto& [id, item] : anime::db.items) {
     if (item.IsInList()) {
+      const auto mal_id = ToInt(item.GetId(sync::ServiceId::MyAnimeList));
+      if (!mal_id) {
+        LOGW(L"MAL ID unavailable for #{} ({})", id, item.GetTitle());
+        continue;
+      }
+
       auto node = node_myanimelist.append_child(L"anime");
-      XmlWriteInt(node, L"series_animedb_id", item.GetId());
+      XmlWriteInt(node, L"series_animedb_id", mal_id);
       XmlWriteStr(node, L"series_title", item.GetTitle(), pugi::node_cdata);
       XmlWriteStr(node, L"series_type", tr_series_type(item.GetType()));
       XmlWriteInt(node, L"series_episodes", item.GetEpisodeCount());

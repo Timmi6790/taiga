@@ -1,6 +1,6 @@
 /*
 ** Taiga
-** Copyright (C) 2010-2020, Eren Okka
+** Copyright (C) 2010-2021, Eren Okka
 **
 ** This program is free software: you can redistribute it and/or modify
 ** it under the terms of the GNU General Public License as published by
@@ -213,6 +213,10 @@ int ParseMediaObject(const Json& json) {
   anime_item.SetSource(ServiceId::AniList);
   anime_item.SetId(ToWstr(anime_id), ServiceId::AniList);
   anime_item.SetLastModified(time(nullptr));  // current time
+
+  if (const auto mal_id = JsonReadInt(json, "idMal")) {
+    anime_item.SetId(ToWstr(mal_id), ServiceId::MyAnimeList);
+  }
 
   anime_item.SetTitle(StrToWstr(JsonReadStr(json["title"], "userPreferred")));
   anime_item.SetType(TranslateSeriesTypeFrom(JsonReadStr(json, "format")));

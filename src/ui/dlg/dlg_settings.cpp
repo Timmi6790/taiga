@@ -1,6 +1,6 @@
 /*
 ** Taiga
-** Copyright (C) 2010-2020, Eren Okka
+** Copyright (C) 2010-2021, Eren Okka
 **
 ** This program is free software: you can redistribute it and/or modify
 ** it under the terms of the GNU General Public License as published by
@@ -282,6 +282,7 @@ void SettingsDialog::OnOK() {
   if (page->IsWindow()) {
     taiga::settings.SetShareDiscordEnabled(page->IsDlgButtonChecked(IDC_CHECK_DISCORD));
     taiga::settings.SetShareDiscordUsernameEnabled(page->IsDlgButtonChecked(IDC_CHECK_DISCORD_USERNAME));
+    taiga::settings.SetShareDiscordGroupEnabled(page->IsDlgButtonChecked(IDC_CHECK_DISCORD_GROUP));
   }
   // Sharing > HTTP
   page = &pages[kSettingsPageSharingHttp];

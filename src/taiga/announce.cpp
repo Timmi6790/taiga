@@ -1,6 +1,6 @@
 /*
 ** Taiga
-** Copyright (C) 2010-2020, Eren Okka
+** Copyright (C) 2010-2021, Eren Okka
 **
 ** This program is free software: you can redistribute it and/or modify
 ** it under the terms of the GNU General Public License as published by
@@ -68,13 +68,22 @@ void Announcer::Do(int modes, anime::Episode* episode, bool force) {
   if (modes & kAnnounceToDiscord) {
     if (settings.GetShareDiscordEnabled() || force) {
       LOGD(L"Discord");
-      const std::wstring details = LimitText(ReplaceVariables(
-          settings.GetShareDiscordFormatDetails(), *episode, false, force), 64);
-      const std::wstring state = LimitText(ReplaceVariables(
-          settings.GetShareDiscordFormatState(), *episode, false, force), 64);
+
+      std::wstring details = L"%title%";
+      details = ReplaceVariables(details, *episode, false, force);
+      details = LimitText(details, 64);
+
+      std::wstring state =
+          L"$if(%episode%,Episode %episode%$if(%total%,/%total%) )";
+      if (settings.GetShareDiscordGroupEnabled())
+        state += L"$if(%group%,by %group%)";
+      state = ReplaceVariables(state, *episode, false, force);
+      state = LimitText(state, 64);
+
       auto timestamp = std::time(nullptr);
       if (!force)
         timestamp -= settings.GetSyncUpdateDelay();
+
       link::discord::UpdatePresence(WstrToStr(details), WstrToStr(state),
                                     timestamp);
     }
